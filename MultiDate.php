@@ -56,9 +56,12 @@ class MultiDate
         $hour12 = date('g');
         $hour24 = date('G');
         $timezone = date('e');
+        $weekNumber = date('w', $timeStamp) + 2;
+
+        $year2 = substr($year, 2);
 
         $format_char = str_split($format);
-        $accepted_char = ['y', 'M', 'm', 'd', 'w', 's', 'i', 'a', 'A', 'g', 'G', 'e'];
+        $accepted_char = ['Y', 'y', 'M', 'm', 'd', 'w', 'W', 's', 'i', 'a', 'A', 'g', 'G', 'e'];
         $date_format = '';
         foreach ($format_char as $char) {
             if (in_array($char, $accepted_char)) {
@@ -68,10 +71,12 @@ class MultiDate
             }
         }
 
-        $date_format = str_replace('%%y', $year, $date_format);                // Year
-        $date_format = str_replace('%%M', $monthName, $date_format);          // Month Name
-        $date_format = str_replace('%%m', $month, $date_format);             // Month Number
-        $date_format = str_replace('%%d', $days, $date_format);             // Day
+        $date_format = str_replace('%%Y', $year2, $date_format);                 // Year
+        $date_format = str_replace('%%y', $year, $date_format);                 // Year 2 digits
+        $date_format = str_replace('%%M', $monthName, $date_format);           // Month Name
+        $date_format = str_replace('%%m', $month, $date_format);              // Month Number
+        $date_format = str_replace('%%d', $days, $date_format);              // Day
+        $date_format = str_replace('%%W', $weekNumber, $date_format);       // Week Number
         $date_format = str_replace('%%w', $weekName, $date_format);        // Week Name
         $date_format = str_replace('%%s', $second, $date_format);         // Second
         $date_format = str_replace('%%i', $minute, $date_format);        // Minute
@@ -120,9 +125,9 @@ class MultiDate
     private static function GWeek($lang)
     {
         if ($lang == 'en') {
-            return ['Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+            return ['1' => 'Saturday', '2' => 'Sunday', '3' => 'Monday', '4' => 'Tuesday', '5' => 'Wednesday', '6' => 'Thursday', '7' => 'Friday'];
         } else {
-            return ['ستردی', 'ساندی', 'ماندی', 'توزدی', 'ونزدی', 'ترزدی', 'فرایدی'];
+            return ['1' => 'ستردی', '2' => 'ساندی', '3' => 'ماندی', '4' => 'توزدی', '5' => 'ونزدی', '6' => 'ترزدی', '7' => 'فرایدی'];
         }
     }
 
@@ -176,3 +181,5 @@ class MultiDate
         return $fullDate;
     }
 }
+
+echo MultiDate::Gregorian_To_Jalali('W', date('y-m-d'), 'Asia/Tehran', 'fa', 'fa', 'fa');
